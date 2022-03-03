@@ -1,0 +1,90 @@
+// module dependencies.
+
+let app = require('../app');
+let debug = require('debug')('portfolio-server:server');
+let http = require('http');
+const fs = require('fs');
+const path = require('path')
+
+
+/**
+ * normalizing a port into a number, string or false
+ */
+
+const normalizePort = (val) => {
+     let port = parseInt(val, 10);
+
+     // if port is not a number
+     if (isNaN(port)) {
+          // named pipe
+          return val;
+     }
+
+     if (port >= 0) {
+          // port number
+          return port;
+     }
+
+     // if no instance
+
+     return false;
+}
+
+// Getting port from the enviroment and storing in express
+let port = normalizePort(process.env.PORT || '8000');
+app.set('port', port);
+
+/**
+ * creating a HTTP server.
+ */
+
+const server = http.createServer(app);
+
+
+/**
+ * Event listener to handle HTTP "error" events
+ */
+
+const onError = (error) => {
+     if (error.syscall !== 'listen') {
+          throw error;
+     }
+
+     let bind = typeof port === 'stirng' ? 'Pipe ' + port : 'Port ' + port;
+
+     // handling some specific errors with friendly messages
+     switch (error.code) {
+          case 'EACCES':
+               console.error(bind + ' requires elevated privileges');
+               process.exit(1);
+               break;
+          case 'EADDRINUSE':
+               console.error(bind + ' is already is use ___codingHerald.net___');
+               process.exit(1);
+               break;
+          default:
+               throw error;
+     }
+}
+
+/**
+ * listening on provided port , on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+
+
+
+/**
+ * Event listerner for a successful HTTP server "listening" event.
+ */
+
+const onListening = () => {
+     let addr = server.address();
+     let bind = typeof addr === 'string' ? 'Pipe ' + addr : 'Pipe ' + addr.port;
+     debug('Listening on ' + bind);
+     console.log('codingHerald.com Listening on http://localhost:' + port)
+}
+
+server.on('listening', onListening);
