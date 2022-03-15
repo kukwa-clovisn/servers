@@ -1,0 +1,11 @@
+POST http://localhost:8000/user/signup
+Content-Type: application/json
+
+{
+     "username": "user one",
+     "email": "userone@gmail.com",
+     "password": "user on password",
+     "todos" : [
+          "go to school", "do some cleanup","behave","learn","associate with others"
+     ]
+}
